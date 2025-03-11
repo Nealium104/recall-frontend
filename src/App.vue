@@ -1,11 +1,23 @@
 <script setup lang="ts">
 import Nav from "./components/Nav.vue";
+import Card from "./components/Card.vue";
+import Header from "./components/Header.vue";
+import { ref } from "vue";
+
+const isOpen = ref(false);
+
+const toggleSidebar = () => (isOpen.value = !isOpen.value);
 </script>
 
 <template>
-  <Nav />
-  <div class="layout">
-    <router-view />
+  <div :class="['layout', { open: isOpen }]" class="layout">
+    <Card>
+      <Nav :open="isOpen" @toggleSidebar="toggleSidebar" />
+    </Card>
+    <div>
+      <Header />
+      <router-view />
+    </div>
   </div>
 </template>
 
@@ -49,11 +61,18 @@ body {
   background-color: var(--background-primary);
   color: #ffffff;
   box-sizing: border-box;
+  margin: 0;
 }
 
 .layout {
-  display: flex;
-  padding: 1rem;
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  transition: grid-template-columns 0.3s ease;
+  gap: 1em;
+}
+
+.layout.open {
+  grid-template-columns: 100px 1fr;
 }
 
 .hidden {

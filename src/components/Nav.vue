@@ -1,19 +1,27 @@
 <script lang="ts" setup>
-import { MdMenu, MdDashboard } from "vue-icons-plus/md";
+import { defineProps, defineEmits } from "vue";
+import {
+  MdMenu,
+  MdDashboard,
+  MdOutlineWavingHand,
+  MdOutlineBook,
+  MdAutoGraph,
+  MdOutlineQuestionMark,
+  MdOutlineSettings,
+} from "vue-icons-plus/md";
 
-import { ref } from "vue";
+const props = defineProps<{
+  open: boolean;
+}>();
 
-const isOpen = ref(false);
-
-const toggleNav = () => {
-  isOpen.value = !isOpen.value;
-  console.log("hi there");
-};
+const emit = defineEmits<{
+  (event: "toggleSidebar"): void;
+}>();
 </script>
 
 <template>
   <nav class="nav">
-    <div v-show="isOpen" class="inner-nav">
+    <div :class="{ hidden: props.open }" class="inner-nav">
       <div class="top-nav">
         <div>
           <div class="title">Recall</div>
@@ -25,19 +33,31 @@ const toggleNav = () => {
           <MdDashboard />
           <router-link to="/home">Dashboard</router-link>
         </li>
-        <li class="nav-link"><router-link to="/browse">Browse</router-link></li>
-        <li class="nav-link"><router-link to="/stats">Stats</router-link></li>
+        <li class="nav-link">
+          <MdOutlineBook />
+          <router-link to="/browse">Browse</router-link>
+        </li>
+        <li class="nav-link">
+          <MdAutoGraph />
+          <router-link to="/stats">Stats</router-link>
+        </li>
       </ul>
       <div class="break"></div>
       <ul class="nav-links">
-        <li class="nav-link"><router-link to="/about">About</router-link></li>
-        <li class="nav-link"><router-link to="/faqs">FAQs</router-link></li>
         <li class="nav-link">
+          <MdOutlineWavingHand /><router-link to="/about">About</router-link>
+        </li>
+        <li class="nav-link">
+          <MdOutlineQuestionMark />
+          <router-link to="/faqs">FAQs</router-link>
+        </li>
+        <li class="nav-link">
+          <MdOutlineSettings />
           <router-link to="/settings">Settings</router-link>
         </li>
       </ul>
     </div>
-    <MdMenu class="icon" @click="toggleNav" />
+    <MdMenu class="icon" @click="$emit('toggleSidebar')" />
   </nav>
 </template>
 
@@ -45,8 +65,8 @@ const toggleNav = () => {
 .nav {
   display: flex;
   background-color: var(--background-secondary);
-  height: 100%;
-  position: fixed;
+  align-items: start;
+  height: 100vh;
 }
 
 .inner-nav {
@@ -100,18 +120,13 @@ li:has(.router-link-active) {
   border-radius: 8px;
 }
 
-/* .nav-link.router-link-active {
-  background-color: var(--background-secondary);
-  color: var(--accent-color);
-} */
-
 .top-nav {
   display: flex;
 }
 
 .icon {
-  height: 50px;
-  width: 50px;
-  padding: 1rem;
+  padding: 0 0.5em;
+  width: 75px;
+  height: 75px;
 }
 </style>
